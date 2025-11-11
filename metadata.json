@@ -1,0 +1,5 @@
+{
+  "name": "الشات الذكي لمدرسة الاندلس",
+  "description": "An intelligent chatbot to answer questions about student data records, powered by Gemini. Users can ask questions in Arabic about the provided student information.",
+  "requestFramePermissions": []
+}
