@@ -1,7 +1,8 @@
 --[[
 	مفاعل الانهيار — سكريبت بناء الماب
-	طريقة التشغيل: Roblox Studio > View > Command Bar > الصق السكريبت كاملًا > Enter
-	يمكن التراجع عنه بـ Ctrl+Z، وإعادة تشغيله تحذف النسخة القديمة وتبني من جديد.
+	طريقة التشغيل (أي وحدة):
+	  1) Script داخل ServerScriptService باسم MapBuilder (الماب يظهر لما تضغط Play)
+	  2) أو Command Bar > الصق > Enter (الماب ينبني في وضع التعديل ويمكن التراجع بـ Ctrl+Z)
 
 	تخطيط الماب (المفاعل في المركز 0,0):
 	  جنوب  (Z = -200) : القاعدة الآمنة + نقطة الظهور
@@ -15,7 +16,9 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 local CollectionService = game:GetService("CollectionService")
 local Lighting = game:GetService("Lighting")
 
-local recording = ChangeHistoryService:TryBeginRecording("Build Reactor Map")
+-- يشتغل من Command Bar أو كـ Script عادي (داخل ServerScriptService)
+local okRec, recording = pcall(function() return ChangeHistoryService:TryBeginRecording("Build Reactor Map") end)
+if not okRec then recording = nil end
 
 local old = workspace:FindFirstChild("ReactorMap")
 if old then old:Destroy() end
@@ -335,7 +338,8 @@ cc.Parent = Lighting
 Map:SetAttribute("CurrentPhase", 1)
 Map:SetAttribute("Phase1_TimeLimit", 600)
 
+Map:SetAttribute("Ready", true)
 if recording then
-	ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
+	pcall(function() ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit) end)
 end
 print("✅ تم بناء ماب المفاعل — عدد المجسمات المؤقتة:", #CollectionService:GetTagged("HF_Placeholder"))
